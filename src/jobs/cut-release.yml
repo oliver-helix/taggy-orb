@@ -8,6 +8,10 @@ parameters:
     description: type of release (minor, patch)
     type: enum
     enum: ['minor', 'patch']
+  working-directory:
+    type: string
+    default: ~/workdir
 steps:
   - cut-release:
+      working-directory: <<parameters.working-directory>>
       release-type: <<parameters.release-type>>
