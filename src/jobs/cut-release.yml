@@ -1,0 +1,13 @@
+description: >
+  cut a release
+
+executor: default
+
+parameters:
+  release-type:
+    description: type of release (minor, patch)
+    type: enum
+    enum: ['minor', 'patch']
+steps:
+  - cut-release:
+      release-type: <<parameters.release-type>>
