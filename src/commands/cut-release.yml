@@ -14,7 +14,7 @@ steps:
   - run:
       name: Tag version and push tag
       command: |
-        LATESTTAG=$(git describe --tags --abbrev=0 @)
+        LATESTTAG=$(git describe --tags --abbrev=0 @ || echo 'v0.0.0')
         echo "git branch is $(git branch --show-current)"
         echo "Latest tag on branch: $LATESTTAG"
         if [ <<parameters.release-type>> == "minor" ]; then
