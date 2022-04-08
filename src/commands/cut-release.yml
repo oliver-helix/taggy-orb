@@ -14,7 +14,7 @@ steps:
   - run:
       name: Tag version and push tag
       command: |
-        LATESTTAG=$(git tag --merged | tail -1)
+        LATESTTAG=$(git tag --merged | sort -V | tail -1)
         LATESTTAG=${LATESTTAG:-v0.0.0}
         echo "git branch is $(git branch --show-current)"
         echo "Latest tag on branch: $LATESTTAG"
