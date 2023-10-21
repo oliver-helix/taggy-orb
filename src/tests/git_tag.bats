@@ -62,7 +62,7 @@ setup() {
     run get_tag
     [ "$status" -eq 1 ]
     echo $output
-    [ "$output" = "Unable to parse CURRENT_VERSION bad with regex $TAG_REGEX." ]
+    [ "$output" = "Unable to parse CURRENT_VERSION bad with regex v?([0-9]+)\.([0-9]+)\.([0-9]+)(-rc\.?([0-9]+))?" ]
 }
 
 @test 'get_tag 3: patch' {
