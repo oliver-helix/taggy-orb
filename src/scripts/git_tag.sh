@@ -72,7 +72,7 @@ get_tag() {
       NEWTAG=$NEWTAG-rc$((${release_candidate:-0}+1))
     fi
   else
-    echo "Unable to parse CURRENT_VERSION $CURRENT_VERSION with regex $TAG_REGEX."
+    echo "Unable to parse CURRENT_VERSION $CURRENT_VERSION with regex $TAG_REGEX"
     exit 1
   fi
   echo "$NEWTAG"
