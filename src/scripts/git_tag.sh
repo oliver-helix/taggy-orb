@@ -67,6 +67,9 @@ get_tag() {
       exit 1
     fi
 
+    echo $RELEASE_CANDIDATE
+    [[ $RELEASE_CANDIDATE ]] && echo true || echo false
+
     # if specified, mark release candidate (and bump previous if exists)
     if [[ $RELEASE_CANDIDATE ]]; then
       NEWTAG=$NEWTAG-rc$((${release_candidate:-0}+1))
