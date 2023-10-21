@@ -73,7 +73,7 @@ setup() {
 }
 
 @test 'get_tag 4: minor' {
-    export RELEASE_TYPE="patch"
+    export RELEASE_TYPE="minor"
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
@@ -82,7 +82,7 @@ setup() {
 }
 
 @test 'get_tag 5: major' {
-    export RELEASE_TYPE="patch"
+    export RELEASE_TYPE="major"
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
@@ -121,6 +121,7 @@ setup() {
 @test 'get_tag 9: RELEASE_TYPE overwrite' {
     export CIRCLE_BRANCH="fix/patch"  # should be patch
     export RELEASE_TYPE="minor"  # overwrite
+    export RELEASE_CANDIDATE=false
     export CURRENT_VERSION="v1.2.3"
     run get_tag
     echo $output
