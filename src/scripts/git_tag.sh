@@ -63,7 +63,7 @@ get_tag() {
     elif [[ $RELEASE_TYPE == "patch" ]]; then
       NEWTAG="v$major.$minor.$(($patch+1))"
     else
-      echo "Unkown RELEASE_TYPE $RELEASE_TYPE"
+      echo "Unknown RELEASE_TYPE $RELEASE_TYPE"
       exit 1
     fi
 
