@@ -2,14 +2,18 @@ setup() {
     source ./src/scripts/git_tag.sh
 }
 
-@test 'infer_release_type 1: hotfix' {
+function infer_release_type_1 { #@test
+    # test hotfix parsed into patch
+
     export CIRCLE_BRANCH=hotfix
     run infer_release_type
     echo $output
     [ "$output" = "patch" ]
 }
 
-@test 'infer_release_type 2: CIRCLE_BRANCH not defined' {
+function infer_release_type_2 { #@test
+    # test that CIRCLE_BRANCH must be defined
+
     unset CIRCLE_BRANCH
     run infer_release_type
     [ "$status" -eq 1 ]
@@ -17,7 +21,9 @@ setup() {
     [ "$output" = "CIRCLE_BRANCH variable required" ]
 }
 
-@test 'infer_release_type 3: bad branch name' {
+function infer_release_type_3 { #@test
+    # test unparsable git branch name
+
     export CIRCLE_BRANCH=bad
     run infer_release_type
     [ "$status" -eq 1 ]
@@ -25,28 +31,31 @@ setup() {
     [ "$output" = "Unable to infer release-type from branch $CIRCLE_BRANCH" ]
 }
 
-@test 'infer_release_candidate 1' {
+function infer_release_candidate_1 { #@test
     export CIRCLE_BRANCH=main
     run infer_release_candidate
     echo $output
     [ "$output" = false ]
 }
 
-@test 'infer_release_candidate 2' {
+function infer_release_candidate_2 { #@test
     export CIRCLE_BRANCH=not-main
     run infer_release_candidate
     echo $output
     [ "$output" = true ]
 }
 
-@test 'infer_current_version 1' {
+function infer_current_version_1 { #@test
     # not sure how to test git here without a bunch of random tags...
+
     run infer_current_version
     echo $output
     [ "$output" = "v0.0.0" ]
 }
 
-@test 'get_tag 1: Bad RELEASE_TYPE value' {
+function get_tag_1 { #@test
+    # test bad RELEASE_TYPE value
+
     export CIRCLE_BRANCH="main"
     export RELEASE_TYPE="bad"
     run get_tag
@@ -55,7 +64,9 @@ setup() {
     [ "$output" = "Unknown RELEASE_TYPE bad" ]
 }
 
-@test 'get_tag 2: Bad CURRENT_VERSION value' {
+function get_tag_2 { #@test
+    # test bad CURRENT_VERSION tag
+
     export RELEASE_TYPE=patch
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="bad"
@@ -65,7 +76,9 @@ setup() {
     [ "$output" = "Unable to parse CURRENT_VERSION bad with regex v?([0-9]+)\.([0-9]+)\.([0-9]+)(-rc\.?([0-9]+))?" ]
 }
 
-@test 'get_tag 3: patch' {
+function get_tag_3 { #@test
+    # test patch increment
+
     export RELEASE_TYPE="patch"
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
@@ -74,7 +87,9 @@ setup() {
     [ "$output" = "v1.2.4" ]
 }
 
-@test 'get_tag 4: minor' {
+function get_tag_4 { #@test
+    # test minor increment
+
     export RELEASE_TYPE="minor"
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
@@ -83,7 +98,9 @@ setup() {
     [ "$output" = "v1.3.0" ]
 }
 
-@test 'get_tag 5: major' {
+function get_tag_5 { #@test
+    # test major increment
+
     export RELEASE_TYPE="major"
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
@@ -92,7 +109,9 @@ setup() {
     [ "$output" = "v2.0.0" ]
 }
 
-@test 'get_tag 6: release-candidate' {
+function get_tag_6 { #@test
+    # test release candidate added
+
     export RELEASE_TYPE="patch"
     export CIRCLE_BRANCH="not-main"
     export CURRENT_VERSION="v1.2.3"
@@ -101,7 +120,9 @@ setup() {
     [ "$output" = "v1.2.4-rc1" ]
 }
 
-@test 'get_tag 7: release-candidate increment' {
+function get_tag_7 { #@test
+    # test release candidate increment
+
     export RELEASE_TYPE="patch"
     export CIRCLE_BRANCH="not-main"
     export CURRENT_VERSION="v1.2.3-rc1"
@@ -110,7 +131,20 @@ setup() {
     [ "$output" = "v1.2.4-rc2" ]
 }
 
-@test 'get_tag 8: RELEASE_CANDIDATE overwrite' {
+function get_tag_8 { #@test
+    # test release candidate removed
+
+    export RELEASE_TYPE="patch"
+    export CIRCLE_BRANCH="main"
+    export CURRENT_VERSION="v1.2.3-rc1"
+    run get_tag
+    echo $output
+    [ "$output" = "v1.2.4" ]
+}
+
+function get_tag_9 { #@test
+    # test RELEASE_CANDIDATE overwrite inferrence
+
     export RELEASE_TYPE="patch"
     export CIRCLE_BRANCH="not-main"  # should be release-candidate
     export RELEASE_CANDIDATE="true"  # overwrite
@@ -120,7 +154,9 @@ setup() {
     [ "$output" = "v1.2.4-rc1" ]
 }
 
-@test 'get_tag 9: RELEASE_TYPE overwrite' {
+function get_tag_10 { #@test
+    # test RELEASE_TYPE overwrite inferrence
+
     export CIRCLE_BRANCH="fix/patch"  # should be patch
     export RELEASE_TYPE="minor"  # overwrite
     export RELEASE_CANDIDATE=false
