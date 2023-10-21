@@ -9,7 +9,8 @@
 #     export PARAM_TO="World"
 #     # Capture the output of our "Greet" function
 #     run Greet
-#     [ "$output" == "Hello World" ]
+echo $output#
+[ "$output" == "Hello World" ]
 # }
 
 setup() {
@@ -19,12 +20,14 @@ setup() {
 @test 'infer_release_type 1: hotfix' {
     export CIRCLE_BRANCH=hotfix
     run infer_release_type
+    echo $output
     [ "$output" = "patch" ]
 }
 
 @test 'infer_release_type 2: CIRCLE_BRANCH not defined' {
     run infer_release_type
     [ "$status" -eq 1 ]
+    echo $output
     [ "$output" = "CIRCLE_BRANCH variable required" ]
 }
 
@@ -32,24 +35,28 @@ setup() {
     export CIRCLE_BRANCH=bad
     run infer_release_type
     [ "$status" -eq 1 ]
+    echo $output
     [ "$output" = "Unable to infer release-type from branch $CIRCLE_BRANCH" ]
 }
 
 @test 'infer_release_candidate 1' {
     export CIRCLE_BRANCH=main
     run infer_release_candidate
+    echo $output
     [ "$output" = false ]
 }
 
 @test 'infer_release_candidate 2' {
     export CIRCLE_BRANCH=not-main
     run infer_release_candidate
+    echo $output
     [ "$output" = true ]
 }
 
 @test 'infer_current_version 1' {
     # not sure how to test git here without a bunch of random tags...
     run infer_current_version
+    echo $output
     [ "$output" = "v0.0.0" ]
 }
 
@@ -58,6 +65,7 @@ setup() {
     export RELEASE_TYPE="bad"
     run get_tag
     [ "$status" -eq 1 ]
+    echo $output
     [ "$output" = "Unkown RELEASE_TYPE bad" ]
 }
 
@@ -66,6 +74,7 @@ setup() {
     export CURRENT_VERSION="bad"
     run get_tag
     [ "$status" -eq 1 ]
+    echo $output
     [ "$output" = "Unable to parse CURRENT_VERSION bad with regex $TAG_REGEX." ]
 }
 
@@ -74,6 +83,7 @@ setup() {
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v1.2.4" ]
 }
 
@@ -82,6 +92,7 @@ setup() {
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v1.3.0" ]
 }
 
@@ -90,6 +101,7 @@ setup() {
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v2.0.0" ]
 }
 
@@ -98,6 +110,7 @@ setup() {
     export CIRCLE_BRANCH="not-main"
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v1.2.4-rc1" ]
 }
 
@@ -106,6 +119,7 @@ setup() {
     export CIRCLE_BRANCH="not-main"
     export CURRENT_VERSION="v1.2.3-rc1"
     run get_tag
+    echo $output
     [ "$output" = "v1.2.4-rc2" ]
 }
 
@@ -115,6 +129,7 @@ setup() {
     export RELEASE_CANDIDATE="true"  # overwrite
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v1.2.4-rc1" ]
 }
 
@@ -123,5 +138,6 @@ setup() {
     export RELEASE_TYPE="minor"  # overwrite
     export CURRENT_VERSION="v1.2.3"
     run get_tag
+    echo $output
     [ "$output" = "v1.3.0" ]
 }
