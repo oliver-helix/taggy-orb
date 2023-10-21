@@ -38,7 +38,7 @@ get_tag() {
 
   # if not provided, infer release candidate
   if [[ ! $RELEASE_CANDIDATE ]]; then
-    RELEASE_CANDIDATE=$(infer_release_type)
+    RELEASE_CANDIDATE=$(infer_release_candidate)
   fi
 
   # if not provided, infer current version
