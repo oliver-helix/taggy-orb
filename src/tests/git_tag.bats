@@ -10,6 +10,7 @@ setup() {
 }
 
 @test 'infer_release_type 2: CIRCLE_BRANCH not defined' {
+    unset CIRCLE_BRANCH
     run infer_release_type
     [ "$status" -eq 1 ]
     echo $output
