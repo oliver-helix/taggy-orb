@@ -52,10 +52,11 @@ setup() {
     run get_tag
     [ "$status" -eq 1 ]
     echo $output
-    [ "$output" = "Unkown RELEASE_TYPE bad" ]
+    [ "$output" = "Unknown RELEASE_TYPE bad" ]
 }
 
 @test 'get_tag 2: Bad CURRENT_VERSION value' {
+    export RELEASE_TYPE=patch
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="bad"
     run get_tag

@@ -47,10 +47,6 @@ get_tag() {
     CURRENT_VERSION=$(infer_current_version)
   fi
 
-  echo "RELEASE_TYPE=$RELEASE_TYPE"
-  echo "RELEASE_CANDIDATE=$RELEASE_CANDIDATE"
-  echo "CURRENT_VERSION=$CURRENT_VERSION"
-
   # parse version parts from regex
   TAG_REGEX='v?([0-9]+)\.([0-9]+)\.([0-9]+)(-rc\.?([0-9]+))?'
   if [[ "$CURRENT_VERSION" =~ $TAG_REGEX ]]; then
