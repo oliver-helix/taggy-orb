@@ -13,7 +13,9 @@
 # }
 
 setup() {
-    source ./src/scripts/get_tag.sh
+    ls
+    pwd
+    source src/scripts/get_tag.sh
 }
 
 @test 'infer_release_type 1: hotfix' {
