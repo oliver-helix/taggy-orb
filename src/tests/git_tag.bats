@@ -23,14 +23,14 @@ setup() {
 }
 
 @test 'infer_release_type 2: CIRCLE_BRANCH not defined' {
-    infer_release_type
+    run infer_release_type
     assert_failure
     assert_output "CIRCLE_BRANCH variable required"
 }
 
 @test 'infer_release_type 3: bad branch name' {
     export CIRCLE_BRANCH=bad
-    infer_release_type
+    run infer_release_type
     assert_failure
     assert_output "Unable to infer release-type from branch $CIRCLE_BRANCH"
 }
@@ -64,7 +64,7 @@ setup() {
 @test 'get_tag 2: Bad CURRENT_VERSION value' {
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="bad"
-    get_tag
+    run get_tag
     assert_failure
     assert_output "Unable to parse CURRENT_VERSION bad with regex $TAG_REGEX."
 }
