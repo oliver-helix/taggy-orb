@@ -7,7 +7,7 @@
 # @test '1: Greet the world' {
 #     # Mock environment variables or functions by exporting them (after the script has been sourced)
 #     export PARAM_TO="World"
-#     # Capture the output of our "Greet" function
+#     # assert_output our "Greet" functi
 #     result=$(Greet)
 #     [ "$result" == "Hello World" ]
 # }
@@ -24,15 +24,15 @@ setup() {
 
 @test 'infer_release_type 2: CIRCLE_BRANCH not defined' {
     infer_release_type
-    [ "$status" -eq 1 ]
-    [ "$output" = "CIRCLE_BRANCH variable required" ]
+    assert_failure
+    assert_output "CIRCLE_BRANCH variable required"
 }
 
 @test 'infer_release_type 3: bad branch name' {
     export CIRCLE_BRANCH=bad
     infer_release_type
-    [ "$status" -eq 1 ]
-    [ "$output" = "Unable to infer release-type from branch $CIRCLE_BRANCH" ]
+    assert_failure
+    assert_output "Unable to infer release-type from branch $CIRCLE_BRANCH"
 }
 
 @test 'infer_release_candidate 1' {
@@ -57,16 +57,16 @@ setup() {
     export CIRCLE_BRANCH="main"
     export RELEASE_TYPE="bad"
     get_tag
-    [ "$status" -eq 1 ]
-    [ "$output" = "Unkown RELEASE_TYPE bad" ]
+    assert_failure
+    assert_output "Unkown RELEASE_TYPE bad"
 }
 
 @test 'get_tag 2: Bad CURRENT_VERSION value' {
     export CIRCLE_BRANCH="main"
     export CURRENT_VERSION="bad"
     get_tag
-    [ "$status" -eq 1 ]
-    [ "$output" = "Unable to parse CURRENT_VERSION bad with regex $TAG_REGEX." ]
+    assert_failure
+    assert_output "Unable to parse CURRENT_VERSION bad with regex $TAG_REGEX."
 }
 
 @test 'get_tag 3: patch' {
