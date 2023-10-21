@@ -25,7 +25,7 @@ infer_release_candidate() {
 }
 
 infer_current_version() {
-  CURRENT_VERSION=$(git tag --merged | sort -V | tail -1)
+  CURRENT_VERSION=$(git tag --merged | sort -V | tail -1 2> /dev/null || echo "")
   CURRENT_VERSION=${CURRENT_VERSION:-v0.0.0}
 }
 
