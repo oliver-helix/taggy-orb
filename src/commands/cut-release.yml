@@ -1,18 +1,18 @@
 description: >
   cut a release
 parameters:
-  release-type:
-    description: type of release (minor, patch)
-    type: enum
-    enum: ['major', 'minor', 'patch']
+  current-version:
+    description: current version upon which to increment
+    type: string
     default: null
   release-candidate:
     description: add a release-candidate flag to tag
     type: boolean
     default: null
-  current-version:
-    description: current version upon which to increment
-    type: string
+  release-type:
+    description: type of release (minor, patch)
+    type: enum
+    enum: ['major', 'minor', 'patch']
     default: null
   working-directory:
     type: string
