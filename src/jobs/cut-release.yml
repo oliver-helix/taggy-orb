@@ -4,14 +4,25 @@ description: >
 executor: default
 
 parameters:
+  file:
+    description: version file
+    type: string
+    default: null
+  release-candidate:
+    description: add a release-candidate flag to tag
+    type: boolean
+    default: null
   release-type:
     description: type of release (minor, patch)
     type: enum
-    enum: ['minor', 'patch']
+    enum: ['major', 'minor', 'patch']
+    default: null
   working-directory:
     type: string
     default: ~/workdir
 steps:
   - cut-release:
-      working-directory: <<parameters.working-directory>>
+      file: <<parameters.file>>
+      release-candidate: <<parameters.release-candidate>>
       release-type: <<parameters.release-type>>
+      working-directory: <<parameters.working-directory>>

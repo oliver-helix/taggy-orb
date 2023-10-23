@@ -1,10 +1,19 @@
 description: >
   cut a release
 parameters:
+  file:
+    description: version file
+    type: string
+    default: null
+  release-candidate:
+    description: add a release-candidate flag to tag
+    type: boolean
+    default: null
   release-type:
     description: type of release (minor, patch)
     type: enum
-    enum: ['minor', 'patch']
+    enum: ['major', 'minor', 'patch']
+    default: null
   working-directory:
     type: string
 steps:
@@ -12,19 +21,9 @@ steps:
       at: << parameters.working-directory >>
   - checkout
   - run:
-      name: Tag version and push tag
-      command: |
-        LATESTTAG=$(git tag --merged | sort -V | tail -1)
-        LATESTTAG=${LATESTTAG:-v0.0.0}
-        echo "git branch is $(git branch --show-current)"
-        echo "Latest tag on branch: $LATESTTAG"
-        if [ <<parameters.release-type>> == "minor" ]; then
-          # Use awk to increment minor version and set patch version to 0
-          NEWTAG=$(echo "$LATESTTAG" | awk '/v/{split($1,v,/[.]/); $1=v[1]"."++v[2]"."0}1')
-        elif [ <<parameters.release-type>> == "patch" ]; then
-          # Use awk to increment patch version only
-          NEWTAG=$(echo "$LATESTTAG" | awk '/v/{split($1,v,/[.]/); $1=v[1]"."v[2]"."++v[3]}1')
-        fi
-        echo "New tag: $NEWTAG"
-        git tag "$NEWTAG"
-        git push --tags
+      name: Git Tag
+      environment:
+        RELEASE_TYPE: <<parameters.release-type>>
+        RELEASE_CANDIDATE: <<parameters.release-candidate>>
+        FILE: <<parameters.file>>
+      command: <<include(scripts/git_tag.sh)>>
